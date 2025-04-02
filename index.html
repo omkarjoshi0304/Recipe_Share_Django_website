@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeShare | Home</title>
+    <link rel="stylesheet" href="stylesheet\main.css">
+</head>
+<body>
+    <header>
+        <div class="menu-icon" id="menuIcon">☰</div>
+        <nav id="mainNav" class="hidden">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            <li><a href="browse.html">Browse</a></li>
+            <li><a href="submit.html">Submit Recipe</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="submissions.html">submissions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Update hero section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Share Your Culinary Creations</h1>
+        <p class="tagline">Join a Community of Passionate Food Lovers</p>
+        <div class="cta-buttons">
+            <a href="./submit.html" class="cta-btn">Submit Recipe</a>
+            <a href="./browse.html" class="cta-btn outline">Browse Recipes</a>
+        </div>
+    </div>
+</section>
+
+        <section class="featured-recipes">
+            <h2>Featured Recipes</h2>
+            <div class="recipe-grid">
+                <!-- Repeat this card structure for each recipe -->
+                <article class="recipe-card">
+                    <div class="card-image-container">
+                        <img src="./images/pasta.jpg" alt="Creamy Garlic Pasta" class="recipe-image">
+                        <span class="recipe-category">Italian</span>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="recipe-title">Creamy Garlic Pasta</h3>
+                        <div class="recipe-meta">
+                            <span class="cooking-time">🕒 30 mins</span>
+                            <span class="difficulty">⭐ ⭐ ⭐</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="scripts\menu.js"></script>
+    <script src="scripts\main.js"></script>
+</body>
+</html>

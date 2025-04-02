@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeShare | Browse</title>
+    <link rel="stylesheet" href="stylesheet\main.css">
+
+</head>
+<body>
+    <!-- Add to ALL HTML files -->
+<header>
+    <div class="menu-icon" id="menuIcon">☰</div>
+    <nav id="mainNav" class="hidden">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="browse.html">Browse</a></li>
+            <li><a href="submit.html">Submit Recipe</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="submissions.html">submissions</a></li>
+        </ul>
+    </nav>
+</header>
+    
+    <!-- In browse.html -->
+<main class="browse-page">
+    <h1>All Recipes</h1>
+    
+    <div class="filter-controls">
+        <select class="category-filter">
+            <option>All Categories</option>
+            <option>Vegetarian</option>
+            <option>Main Dishes</option>
+            <option>Desserts</option>
+            <option>Quick Meals</option>
+        </select>
+    </div>
+
+    <div class="recipe-grid">
+        <!-- Recipe Card 1 -->
+        <article class="recipe-card">
+            <div class="card-image-container">
+                <img src="./images/lasagna.jpg" alt="Vegetarian Lasagna" class="recipe-image">
+                <span class="recipe-category">Vegetarian</span>
+            </div>
+            <div class="card-content">
+                <h3 class="recipe-title">Vegetarian Lasagna</h3>
+                <div class="recipe-meta">
+                    <span class="cooking-time">🕒 60 mins</span>
+                    <span class="difficulty">⭐ ⭐ ⭐ ⭐</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Recipe Card 2 -->
+        <article class="recipe-card">
+            <div class="card-image-container">
+                <img src="./images/pasta.jpg" alt="Creamy Garlic Pasta" class="recipe-image">
+                <span class="recipe-category">Italian</span>
+            </div>
+            <div class="card-content">
+                <h3 class="recipe-title">Creamy Garlic Pasta</h3>
+                <div class="recipe-meta">
+                    <span class="cooking-time">🕒 30 mins</span>
+                    <span class="difficulty">⭐ ⭐ ⭐</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Add more recipe cards -->
+    </div>
+</main>
+    <footer>
+        <p>&copy; 2025 RecipeShare. All rights reserved.</p>
+    </footer>
+    <script src="scripts\menu.js"></script>
+    <script src="scripts\formvalidation.js"></script>
+    <script src="scripts\main.js"></script>
+</body>
+</html>

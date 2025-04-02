@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions | RecipeShare</title>
+    <link rel="stylesheet" href="stylesheet\main.css">
+</head>
+<body>
+        <header>
+            <div class="menu-icon" id="menuIcon">☰</div>
+            <nav id="mainNav" class="hidden">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                <li><a href="browse.html">Browse</a></li>
+                <li><a href="submit.html">Submit Recipe</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="submissions.html">submissions</a></li>
+                </ul>
+            </nav>
+        </header>
+    
+
+    <main class="submissions-page">
+        <h1>Recipe Submissions</h1>
+        <button onclick="loadSubmissions()" class="refresh-btn">Refresh</button>
+        
+        <div class="table-container">
+            <table id="submissionsTable">
+                <thead>
+                    <tr>
+                        <th>Recipe Name</th>
+                        <th>Author Email</th>
+                        <th>Date Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="submissionsBody"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="scripts\menu.js"></script>
+    <script>
+        function loadSubmissions() {
+            const submissions = JSON.parse(localStorage.getItem('recipeSubmissions')) || [];
+            const tbody = document.getElementById('submissionsBody');
+            
+            tbody.innerHTML = submissions.map((sub, index) => `
+                <tr>
+                    <td>${sub.recipeName}</td>
+                    <td>${sub.authorEmail}</td>
+                    <td>${new Date(sub.timestamp).toLocaleDateString()}</td>
+                    <td>
+                        <button onclick="deleteSubmission(${index})" class="btn-delete">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteSubmission(index) {
+            const submissions = JSON.parse(localStorage.getItem('recipeSubmissions')) || [];
+            submissions.splice(index, 1);
+            localStorage.setItem('recipeSubmissions', JSON.stringify(submissions));
+            loadSubmissions();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSubmissions);
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeShare | Contact</title>
+    <link rel="stylesheet" href="stylesheet\main.css">
+   
+</head>
+<body>
+    <!-- Add to ALL HTML files -->
+<header>
+    <div class="menu-icon" id="menuIcon">☰</div>
+    <nav id="mainNav" class="hidden">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="browse.html">Browse</a></li>
+            <li><a href="submit.html">Submit Recipe</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="submissions.html">submissions</a></li>
+        </ul>
+    </nav>
+</header>
+    <main class="contact-page">
+        <h1>Contact Us</h1>
+        
+        <div class="contact-container">
+            <section class="direct-contact">
+                <h2>Direct Contact</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:omkarkjoshi09@gmail.com">omkarkjoshi09@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+353894094733">+353 89 409 4733</a>
+                    </div>
+                </div>
+            </section>
+            <form class="contact-form">
+                <input type="text" id="fullName" placeholder="Full Name">
+    <input type="email" id="contactEmail" placeholder="Email">
+    <input type="tel" id="phone" placeholder="Phone (optional)" pattern="[0-9]{10}">
+    <textarea id="message" placeholder="Your Message"></textarea>
+    
+                <button type="submit" class="cta-btn">Send Message</button>
+            </form>
+        </div>
+        <!-- Enhanced form with 4 fields -->
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RecipeShare. All rights reserved.</p>
+    </footer>
+    <script src="scripts\menu.js"></script>
+    <script src="scripts\formvalidation.js"></script>
+    <script src="scripts\main.js"></script>
+</body>
+</html>
