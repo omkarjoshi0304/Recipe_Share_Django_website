@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecipeShare | About</title>
+  <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .about-section {
+      background-color: #f8f9fa;
+      padding: 60px 20px;
+    }
+    .about-heading {
+      font-size: 3rem;
+      color: #0d1117;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .about-text {
+      font-size: 1.2rem;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto 50px auto;
+      line-height: 1.7;
+    }
+    .mission-card {
+      background-color: #e9ecef;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 700px;
+    }
+    .team-section {
+      padding: 60px 20px;
+      background-color: #ffffff;
+    }
+    .team-heading {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+    }
+    .team-member {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .team-member img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 3px solid #0d1117;
+    }
+    .team-member h3 {
+      margin-bottom: 5px;
+    }
+    .team-member p {
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔄 Navbar -->
+  {% include "main/navbar.html" %}
+
+  <!-- ✨ About Section -->
+  <section class="about-section">
+    <h1 class="about-heading">About RecipeShare</h1>
+    <p class="about-text">
+      RecipeShare is more than just a collection of recipes — it's a passionate community of home cooks,
+      chefs, and food lovers from around the world who believe in the power of sharing. Whether you're an
+      experienced cook or just starting out in the kitchen, RecipeShare provides a welcoming platform to discover,
+      submit, and discuss all things food.
+    </p>
+    <p class="about-text">
+      From simple family dishes to gourmet experiments, we aim to connect people through the universal language of food.
+      Our intuitive interface, submission tools, community-driven ratings, and innovative Kitchen Marketplace allow users to
+      not only share their cooking but also exchange kitchen essentials and connect with like-minded culinary explorers.
+    </p>
+
+    <div class="mission-card">
+      <h3>Our Mission</h3>
+      <p class="mt-3">Connecting food enthusiasts worldwide through the joy of recipe sharing.</p>
+    </div>
+  </section>
+
+  <!-- 👥 Team Section -->
+  <section class="team-section">
+    <h2 class="team-heading">Meet the Team</h2>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-4 team-member">
+          <img src="{% static 'main/media/omkarimage.jpeg' %}" alt="Omkar Joshi">
+          <h3>Omkar Joshi</h3>
+          <p>Founder & Lead Developer</p>
+        </div>
+        <!-- 🧑 Add more team members here if needed -->
+      </div>
+    </div>
+  </section>
+
+  {% include "main/footer.html" %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

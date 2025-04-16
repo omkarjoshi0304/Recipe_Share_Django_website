@@ -1,0 +1,274 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecipeShare | Contact</title>
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+   
+</head>
+<body>
+    <!-- Add to ALL HTML files -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+          <span style="font-size: 1.8rem;">🥘</span>
+          <strong class="ms-2">RecipeShare</strong>
+        </a>
+      
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'browse' %}">Browse</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'submit' %}">Submit Recipe</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'submissions' %}">Submissions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'marketplace_home' %}">Marketplace</a></li>
+            {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'my_marketplace_items' %}">My Listings</a></li>
+            {% endif %}
+          </ul>
+      
+          {% if user.is_authenticated %}
+          <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <span style="font-size: 1.4rem;">👤</span>
+              <span class="ms-2">{{ user.username }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline-light ms-3">Login</a>
+          {% endif %}
+        </div>
+      </header>
+      
+
+
+      {% block content %}
+      <div class="container py-4">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="card-title mb-0">{{ item.title }}</h2>
+              {% if item.seller == request.user or request.user.is_staff %}
+              <div>
+                <a href="{% url 'edit_item' item.id %}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                <a href="{% url 'delete_item' item.id %}" class="btn btn-sm btn-outline-danger me-2">Delete</a>
+                <form id="statusToggleForm" class="d-inline">
+                  {% csrf_token %}
+                  <button type="button" id="toggleStatusBtn" class="btn btn-sm {% if item.is_available %}btn-warning{% else %}btn-success{% endif %}">
+                    Mark as {% if item.is_available %}Unavailable{% else %}Available{% endif %}
+                  </button>
+                </form>
+              </div>
+              {% endif %}
+            </div>
+      
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ item.title }}">
+                {% else %}
+                <div class="bg-secondary text-white p-4 text-center rounded">No Image Available</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><strong>Price:</strong> ${{ item.price }}</li>
+                  <li class="list-group-item"><strong>Condition:</strong> {{ item.get_condition_display }}</li>
+                  <li class="list-group-item"><strong>Category:</strong> {{ item.category.name }}</li>
+                  <li class="list-group-item"><strong>Seller:</strong> {{ item.seller.username }}</li>
+                  <li class="list-group-item"><strong>Posted:</strong> {{ item.date_posted|date:"F j, Y" }}</li>
+                  <li class="list-group-item">
+                    <strong>Status:</strong>
+                    <span id="itemStatus" class="{% if item.is_available %}text-success{% else %}text-danger{% endif %}">
+                      {% if item.is_available %}Available{% else %}Not Available{% endif %}
+                    </span>
+                  </li>
+                </ul>
+      
+                {% if item.is_available and request.user.is_authenticated and request.user != item.seller %}
+                <div class="mt-4">
+                  <h5>Make an Offer</h5>
+                  {% if user_has_offer %}
+                  <p class="text-muted">You have already made an offer on this item.</p>
+                  {% else %}
+                  <form id="offerForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="offer_price" class="form-label">Your Offer ($):</label>
+                      <input type="number" id="offer_price" name="offer_price" class="form-control" min="0.01" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="message" class="form-label">Message (optional):</label>
+                      <textarea id="message" name="message" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Offer</button>
+                  </form>
+                  <div id="offerResult" class="mt-3" style="display: none;"></div>
+                  {% endif %}
+                </div>
+                {% elif not request.user.is_authenticated %}
+                <p class="mt-3"><a href="{% url 'login' %}?next={{ request.path }}">Login to make an offer</a></p>
+                {% endif %}
+              </div>
+            </div>
+      
+            <div class="mt-5">
+              <h4>Description</h4>
+              <p class="text-muted">{{ item.description|linebreaks }}</p>
+            </div>
+          </div>
+        </div>
+      
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h4 class="card-title">Reviews</h4>
+      
+            {% if user.is_authenticated %}
+            <form method="post" class="mt-3">
+              {% csrf_token %}
+              {{ review_form.as_p }}
+              <button type="submit" class="btn btn-success">Submit Review</button>
+            </form>
+            {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Login to write a review</a></p>
+            {% endif %}
+      
+            <div class="mt-4">
+              {% for review in reviews %}
+              <div class="border-bottom mb-3 pb-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <strong>{{ review.reviewer.username }}</strong>
+                  <span class="text-muted">{{ review.date_posted|date:"M d, Y" }}</span>
+                </div>
+                <div class="text-warning">
+                  {% for i in "12345" %}
+                  <span class="star {% if i|add:"0" <= review.rating %}filled{% endif %}">★</span>
+                  {% endfor %}
+                </div>
+                <p class="mb-0">{{ review.comment }}</p>
+              </div>
+              {% empty %}
+              <p>No reviews yet.</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Offer form submission
+    const offerForm = document.getElementById('offerForm');
+    if (offerForm) {
+        offerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const offerResult = document.getElementById('offerResult');
+            offerResult.innerHTML = '<p>Submitting your offer...</p>';
+            offerResult.style.display = 'block';
+            offerResult.className = '';
+            
+            const formData = new FormData(offerForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await fetch("{% url 'ajax_submit_offer' item.id %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    offerResult.className = 'alert alert-success';
+                    offerResult.innerHTML = `<p>${data.message}</p>`;
+                    offerForm.reset();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    offerResult.className = 'alert alert-danger';
+                    offerResult.innerHTML = '<p>Error: ' + 
+                        (data.errors ? Object.values(data.errors).join(', ') : 'Failed to submit offer') + '</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                offerResult.className = 'alert alert-danger';
+                offerResult.innerHTML = '<p>An error occurred. Please try again later.</p>';
+            }
+        });
+    }
+    
+    // Item status toggle
+    const toggleStatusBtn = document.getElementById('toggleStatusBtn');
+    if (toggleStatusBtn) {
+        toggleStatusBtn.addEventListener('click', async function() {
+            const itemStatus = document.getElementById('itemStatus');
+            const isCurrentlyAvailable = itemStatus.textContent.trim() === 'Available';
+            
+            const formData = new FormData();
+            formData.append('is_available', (!isCurrentlyAvailable).toString());
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            try {
+                const response = await fetch("{% url 'ajax_update_item_status' item.id %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update the UI
+                    itemStatus.textContent = data.is_available ? 'Available' : 'Not Available';
+                    itemStatus.className = data.is_available ? 'text-success' : 'text-danger';
+                    
+                    // Update the button
+                    toggleStatusBtn.textContent = data.is_available ? 'Mark as Unavailable' : 'Mark as Available';
+                    toggleStatusBtn.className = `btn btn-sm ${data.is_available ? 'btn-warning' : 'btn-success'}`;
+                } else {
+                    alert('Failed to update item status: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while updating item status.');
+            }
+        });
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+        
+          
+        
+
+{% include "main/footer.html" %}
+
+    
+</body>
+</html>

@@ -1,0 +1,40 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <span style="font-size: 1.8rem;">🥘</span>
+      <strong class="ms-2">RecipeShare</strong>
+    </a>
+  
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'browse' %}">Browse</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'submit' %}">Submit Recipe</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'submissions' %}">Submissions</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'marketplace_home' %}">Marketplace</a></li>
+        {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'my_marketplace_items' %}">My Listings</a></li>
+        {% endif %}
+      </ul>
+  
+      {% if user.is_authenticated %}
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <span style="font-size: 1.4rem;">👤</span>
+          <span class="ms-2">{{ user.username }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline-light ms-3">Login</a>
+      {% endif %}
+    </div>
+  </header>
+  

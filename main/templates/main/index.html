@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RecipeShare | Home</title>
+  <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main {
+      flex: 1;
+    }
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+      <span style="font-size: 1.8rem;">🥘</span>
+      <strong class="ms-2">RecipeShare</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'browse' %}">Browse</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'submit' %}">Submit Recipe</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'submissions' %}">Submissions</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'marketplace_home' %}">Marketplace</a></li>
+        {% if user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'my_marketplace_items' %}">My Listings</a></li>
+        {% endif %}
+      </ul>
+      {% if user.is_authenticated %}
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button"
+          id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <span style="font-size: 1.4rem;">👤</span>
+          <span class="ms-2">{{ user.username }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+          <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline-light ms-3">Login</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main>
+    <section class="bg-dark text-white text-center py-5 rounded-bottom">
+      <div class="container">
+        <h1 class="display-5 fw-bold">Share Your Culinary Creations</h1>
+        <p class="lead mb-4">Join a Community of Passionate Food Lovers</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="{% url 'submit' %}" class="btn btn-success btn-lg px-4">Submit Recipe</a>
+          <a href="{% url 'browse' %}" class="btn btn-outline-light btn-lg px-4">Browse Recipes</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Recipes -->
+    <section class="container py-5">
+      <h2 class="mb-4"><span class="me-2">🍽️</span>Featured Recipes</h2>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+
+        <!-- Static Sample Card -->
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'main/media/image.png' %}" class="card-img-top" alt="Recipe 1">
+            <div class="card-body">
+              <h5 class="card-title">Creamy Garlic Pasta</h5>
+              <p class="card-text">A rich and cheesy Italian pasta dish for creamy lovers.</p>
+              <p class="text-muted small">⏱️ 30 mins • ⭐⭐⭐⭐</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'main/media/tandoori.jpg' %}" class="card-img-top" alt="Recipe 2">
+            <div class="card-body">
+              <h5 class="card-title">Spicy Tandoori Chicken</h5>
+              <p class="card-text">Grilled Indian chicken infused with bold spices.</p>
+              <p class="text-muted small">⏱️ 45 mins • ⭐⭐⭐⭐⭐</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'main/media/veg fry.jpg' %}" class="card-img-top" alt="Recipe 3">
+            <div class="card-body">
+              <h5 class="card-title">Vegetable Stir-Fry</h5>
+              <p class="card-text">A colorful, quick-fix Asian stir-fry full of crunch.</p>
+              <p class="text-muted small">⏱️ 20 mins • ⭐⭐⭐⭐</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <img src="{% static 'main/media/cake.jpg' %}" class="card-img-top" alt="Recipe 4">
+            <div class="card-body">
+              <h5 class="card-title">Chocolate Lava Cake</h5>
+              <p class="card-text">Decadent molten-centered chocolate dessert.</p>
+              <p class="text-muted small">⏱️ 35 mins • ⭐⭐⭐⭐⭐</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  {% include "main/footer.html" %}
+
+  <script src="{% static 'main/js/menu.js' %}"></script>
+  <script src="{% static 'main/js/main.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

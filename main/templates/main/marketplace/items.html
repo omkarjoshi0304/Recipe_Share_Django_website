@@ -1,0 +1,173 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browse Kitchen Items | RecipeShare</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'main/css/main.css' %}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  {% include "main/navbar.html" %}
+
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Browse Kitchen Items</h1>
+
+    <!-- Filters -->
+    <div class="card p-4 shadow-sm mb-4">
+      <h4 class="mb-3">🔍 Filters</h4>
+      <form id="filterForm" class="row g-3">
+        <div class="col-md-3">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>
+                {{ category.name }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="maxPrice" class="form-label">Maximum Price</label>
+          <input type="number" id="maxPrice" name="max_price" class="form-control" placeholder="e.g. 20">
+        </div>
+
+        <div class="col-md-3">
+          <label for="condition" class="form-label">Condition</label>
+          <select id="condition" name="condition" class="form-select">
+            <option value="">Any Condition</option>
+            <option value="new">New</option>
+            <option value="like_new">Like New</option>
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="poor">Poor</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="search" class="form-label">Search</label>
+          <input type="text" id="search" name="search" class="form-control" placeholder="e.g. Pan, Mixer">
+        </div>
+
+        <div class="col-12 text-end">
+          <button type="button" id="applyFilters" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Items -->
+    <div id="itemsGrid" class="row g-4">
+      {% for item in items %}
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <a href="{% url 'item_detail' item.id %}" class="text-decoration-none text-dark">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">No Image</div>
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="mb-1"><strong>${{ item.price }}</strong></p>
+              <p class="text-muted small mb-1">{{ item.get_condition_display }}</p>
+              <p class="text-muted small">Seller: {{ item.seller.username }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <p id="noItems">No items match your criteria.</p>
+      {% endfor %}
+    </div>
+
+    <!-- AJAX feedback -->
+    <div id="loadingItems" style="display: none;" class="text-center mt-4">
+      <p>Loading items...</p>
+    </div>
+    <div id="filterError" class="alert alert-danger mt-3" style="display: none;"></div>
+  </div>
+
+  {% include "main/footer.html" %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const filterBtn = document.getElementById('applyFilters');
+      const itemsGrid = document.getElementById('itemsGrid');
+      const loadingItems = document.getElementById('loadingItems');
+      const filterError = document.getElementById('filterError');
+
+      filterBtn.addEventListener('click', fetchFilteredItems);
+
+      async function fetchFilteredItems() {
+        const category = document.getElementById('category').value;
+        const maxPrice = document.getElementById('maxPrice').value;
+        const condition = document.getElementById('condition').value;
+        const search = document.getElementById('search').value;
+
+        loadingItems.style.display = 'block';
+        filterError.style.display = 'none';
+
+        try {
+          const queryParams = new URLSearchParams();
+          if (category) queryParams.append('category', category);
+          if (maxPrice) queryParams.append('max_price', maxPrice);
+          if (condition) queryParams.append('condition', condition);
+          if (search) queryParams.append('search', search);
+
+          const response = await fetch(`/marketplace/ajax/items/?${queryParams.toString()}`);
+          if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+          const data = await response.json();
+          if (data.success) {
+            displayItems(data.items);
+          } else {
+            throw new Error('Failed to fetch items');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          filterError.textContent = `Error: ${error.message}`;
+          filterError.style.display = 'block';
+        } finally {
+          loadingItems.style.display = 'none';
+        }
+      }
+
+      function displayItems(items) {
+        itemsGrid.innerHTML = '';
+
+        if (items.length === 0) {
+          itemsGrid.innerHTML = '<p id="noItems">No items match your criteria.</p>';
+          return;
+        }
+
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'col-sm-6 col-md-4 col-lg-3';
+          card.innerHTML = `
+            <div class="card h-100 shadow-sm">
+              <a href="${item.url}" class="text-decoration-none text-dark">
+                ${item.image_url ? `<img src="${item.image_url}" class="card-img-top" alt="${item.title}">` : `<div class="card-img-top bg-light d-flex justify-content-center align-items-center" style="height: 200px;">No Image</div>`}
+                <div class="card-body">
+                  <h5 class="card-title">${item.title}</h5>
+                  <p class="mb-1"><strong>$${item.price.toFixed(2)}</strong></p>
+                  <p class="text-muted small mb-1">${item.condition}</p>
+                  <p class="text-muted small">Seller: ${item.seller}</p>
+                </div>
+              </a>
+            </div>`;
+          itemsGrid.appendChild(card);
+        });
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
